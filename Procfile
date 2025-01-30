@@ -1,1 +1,1 @@
-web: gunicorn proj_name.wsgi
+web: gunicorn where2.wsgi
