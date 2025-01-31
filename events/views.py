@@ -12,4 +12,4 @@ def search_events(request):
 
     events = get_ticketmaster_events(location, start_date, end_date)
 
-    return render(request, "events/search_events.html", {"events": events})
+    return render(request, "templates/events/search_events.html", {"events": events})
