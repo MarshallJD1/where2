@@ -1,4 +1,3 @@
-envy.py
+env.py
 __pycache__/
-
-
+*.pyc
