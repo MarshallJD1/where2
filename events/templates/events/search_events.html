@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Events</title>
+    <style>
+        .event-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .event-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <h1>Search for Events</h1>
@@ -13,20 +30,26 @@
         <button type="submit">Search</button>
     </form>
 
+    {% if error_message %}
+        <p class="error-message">{{ error_message }}</p>
+    {% endif %}
+
     {% if events %}
         <h2>Events Found:</h2>
-        <ul>
+        <div>
             {% for event in events %}
-                <li>
-                    <strong>{{ event.name }}</strong><br>
-                    Date: {{ event.date }}<br>
-                    Venue: {{ event.venue }}<br>
+                <div class="event-card">
+                    {% if event.image %}
+                        <img src="{{ event.image }}" alt="{{ event.name }}">
+                    {% endif %}
+                    <h3>{{ event.name }}</h3>
+                    <p><strong>Date:</strong> {{ event.date }}</p>
+                    <p><strong>Venue:</strong> {{ event.venue }}</p>
+                    <p><strong>Description:</strong> {{ event.description }}</p>
                     <a href="{{ event.url }}" target="_blank">More Info</a>
-                </li>
+                </div>
             {% endfor %}
-        </ul>
-    {% elif events is not none %}
-        <p>No events found for the specified date range and location.</p>
+        </div>
     {% endif %}
 </body>
 </html>
