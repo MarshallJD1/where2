@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Events</title>
+</head>
+<body>
+    <h1>Search for Events</h1>
+
+    <form method="GET">
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    {% if events %}
+        <h2>Events Found:</h2>
+        <ul>
+            {% for event in events %}
+                <li>
+                    <strong>{{ event.name }}</strong><br>
+                    Date: {{ event.dates.start.localDate }}<br>
+                    Venue: {{ event._embedded.venues.0.name }}<br>
+                    <a href="{{ event.url }}" target="_blank">More Info</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif events is not none %}
+        <p>No events found for the specified date range and location.</p>
+    {% endif %}
+</body>
+</html>
