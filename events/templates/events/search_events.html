@@ -19,8 +19,8 @@
             {% for event in events %}
                 <li>
                     <strong>{{ event.name }}</strong><br>
-                    Date: {{ event.dates.start.localDate }}<br>
-                    Venue: {{ event._embedded.venues.0.name }}<br>
+                    Date: {{ event.date }}<br>
+                    Venue: {{ event.venue }}<br>
                     <a href="{{ event.url }}" target="_blank">More Info</a>
                 </li>
             {% endfor %}
