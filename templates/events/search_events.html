@@ -1,5 +1,22 @@
-{% extends base.html %}
+{% load static %}
 
-{% block content %}
 
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Events</title>
+    <link rel="stylesheet" href="{% static 'css/indexstyle.css' %}">
+</head>
+
+<body>
+    <h1>Search Events</h1>
+
+    {% block content %}
+
+    {% endblock %}
+    
+</body>
+</html>
