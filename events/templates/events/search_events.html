@@ -5,17 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Events</title>
     <style>
-        .event-card {
+        .eventsCard {
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 15px;
             border-radius: 5px;
         }
-        .event-card img {
-            max-width: 100%;
-            height: auto;
+        .eventsCard img {
             border-radius: 5px;
+            max-width: 100%;  /* Ensures the image does not exceed the container */
+            height: auto;  /* Maintains aspect ratio */
+            object-fit: contain;  /* Prevents stretching */
+            display: block;  
+            margin: auto;  /* Centers the image */
+
         }
+
+
+
         .error-message {
             color: red;
             font-weight: bold;
@@ -45,15 +52,17 @@
                 <h2>Events Found:</h2>
                 <div>
                     {% for event in events %}
-                        <div class="event-card">
+                        <div class="eventsCard card text-white bg-secondary mb-3">
                             {% if event.image %}
                                 <img src="{{ event.image }}" alt="{{ event.name }}">
                             {% endif %}
+                            
                             <h3>{{ event.name }}</h3>
                             <p><strong>Date:</strong> {{ event.date }}</p>
                             <p><strong>Venue:</strong> {{ event.venue }}</p>
                             <p><strong>Description:</strong> {{ event.description }}</p>
                             <a href="{{ event.url }}" target="_blank">More Info</a>
+                            
                         </div>
                     {% endfor %}
                 </div>
