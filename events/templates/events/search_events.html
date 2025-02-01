@@ -33,22 +33,27 @@
         }
     </style>
     <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
 </head>
+
+
 
 
 <body>
     <div class="row">
     <div class="col-8 mx-auto">
             <h1>Search for Events</h1>
-        <div class=" card bg-secondary p-3">
+
             <form method="GET">
                 {% load crispy_forms_tags %}
                 {{ form|crispy }}
                 {% comment %} {{ form.as_p }} {% endcomment %}
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
-        </div>
 
+            {% if error_message %}
+                <p class="error-message">{{ error_message }}</p>
+            {% endif %}
             {% if error_message %}
                 <p class="error-message">{{ error_message }}</p>
             {% endif %}
@@ -57,17 +62,15 @@
                 <h2>Events Found:</h2>
                 <div>
                     {% for event in events %}
-                        <div class="eventsCard card text-white bg-secondary mb-3">
+                        <div class="event-card">
                             {% if event.image %}
                                 <img src="{{ event.image }}" alt="{{ event.name }}">
                             {% endif %}
-                            
                             <h3>{{ event.name }}</h3>
                             <p><strong>Date:</strong> {{ event.date }}</p>
                             <p><strong>Venue:</strong> {{ event.venue }}</p>
                             <p><strong>Description:</strong> {{ event.description }}</p>
-                            <a href="{{ event.url }}" target="_blank" class="btn btn-info">More Info</a>
-                            
+                            <a href="{{ event.url }}" target="_blank">More Info</a>
                         </div>
                     {% endfor %}
                 </div>
