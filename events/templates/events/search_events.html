@@ -23,6 +23,10 @@
 
 
 
+      
+
+
+
         .error-message {
             color: red;
             font-weight: bold;
@@ -61,7 +65,7 @@
                             <p><strong>Date:</strong> {{ event.date }}</p>
                             <p><strong>Venue:</strong> {{ event.venue }}</p>
                             <p><strong>Description:</strong> {{ event.description }}</p>
-                            <a href="{{ event.url }}" target="_blank">More Info</a>
+                            <a href="{{ event.url }}" target="_blank" class="btn btn-info">More Info</a>
                             
                         </div>
                     {% endfor %}
