@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,17 +12,20 @@
             margin-bottom: 15px;
             border-radius: 5px;
         }
+
         .event-card img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
         }
+
         .error-message {
             color: red;
             font-weight: bold;
         }
     </style>
 </head>
+
 <body>
     <h1>Search for Events</h1>
 
@@ -31,25 +35,100 @@
     </form>
 
     {% if error_message %}
-        <p class="error-message">{{ error_message }}</p>
+    <p class="error-message">{{ error_message }}</p>
     {% endif %}
 
     {% if events %}
-        <h2>Events Found:</h2>
-        <div>
-            {% for event in events %}
-                <div class="event-card">
-                    {% if event.image %}
-                        <img src="{{ event.image }}" alt="{{ event.name }}">
-                    {% endif %}
-                    <h3>{{ event.name }}</h3>
-                    <p><strong>Date:</strong> {{ event.date }}</p>
-                    <p><strong>Venue:</strong> {{ event.venue }}</p>
-                    <p><strong>Description:</strong> {{ event.description }}</p>
-                    <a href="{{ event.url }}" target="_blank">More Info</a>
-                </div>
-            {% endfor %}
+    <h2>Events Found:</h2>
+    <div>
+        {% for event in events %}
+        <!-- Example event card with AJAX-enabled save form -->
+        <div class="event-card" id="event-{{ event.id|default:event.name|slugify }}">
+            {% if event.image %}
+            <img class="event-image" src="{{ event.image }}" alt="{{ event.name }}">
+            {% endif %}
+            <h3>{{ event.name }}</h3>
+            <p><strong>Date:</strong> {{ event.date }}</p>
+            <p><strong>Venue:</strong> {{ event.venue }}</p>
+            <p><strong>Description:</strong> {{ event.description }}</p>
+            <a href="{{ event.url }}" target="_blank">More Info</a>
+
+            {% if user.is_authenticated %}
+            <form class="add-event-form" action="{% url 'vacations:add_event_to_vacation' %}" data-event-id="{{ event.id|default:event.name|slugify }}">
+
+                {% csrf_token %}
+                <!-- Hidden fields carrying event details -->
+                <input type="hidden" name="event_id" value="{{ event.id|default:event.name }}">
+                <input type="hidden" name="name" value="{{ event.name }}">
+                <input type="hidden" name="date" value="{{ event.date }}">
+                <input type="hidden" name="venue" value="{{ event.venue }}">
+                <input type="hidden" name="description" value="{{ event.description }}">
+                <input type="hidden" name="image_url" value="{{ event.image }}">
+                <input type="hidden" name="event_url" value="{{ event.url }}">
+
+                <!-- Dropdown for user's vacations -->
+                {{ vacation_form.as_p }}
+
+                <button type="submit">Save to Vacation</button>
+            </form>
+            <div class="ajax-message" id="message-{{ event.id|default:event.name|slugify }}"></div>
+            {% else %}
+            <p>Please log in to save events.</p>
+            {% endif %}
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
+
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll(".add-event-form"); // Get all event save forms
+
+    forms.forEach((form) => { // Add event listener to each form
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();  // Prevent form submission
+
+            const formData = new FormData(form); // Get form data
+            const actionUrl = form.getAttribute("action") || "{% url 'vacations:add_event_to_vacation' %}"; // Get form action URL
+
+            fetch(actionUrl, { // Send form data via AJAX
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then((response) => response.json()) // Parse response as JSON
+                .then((data) => {
+                    const eventId = form.getAttribute("data-event-id"); // Get event ID
+                    const messageDiv = document.getElementById("message-" + eventId); // Get message div
+
+                    if (data.success) { // Show success or error message
+                        messageDiv.innerHTML = `<p style="color:green;">${data.message}</p>`;
+                        form.querySelector("button[type=submit]").disabled = true; // Prevent multiple saves
+                    } else { // Show error message
+                        let errorText = data.errors
+                            ? Object.values(data.errors).join("<br>")
+                            : "An error occurred";
+                        messageDiv.innerHTML = `<p style="color:red;">${errorText}</p>`;
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    const eventId = form.getAttribute("data-event-id");
+                    const messageDiv = document.getElementById("message-" + eventId);
+                    messageDiv.innerHTML = `<p style="color:red;">Server error. Please try again later.</p>`;
+                });
+        });
+    });
+});
+
+    </script>
+
+
+
+
 </body>
+
 </html>
