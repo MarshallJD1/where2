@@ -1,0 +1,14 @@
+<h1>Your Vacations</h1>
+
+{% if vacations %}
+    <ul>
+    {% for vacation in vacations %}
+        <li>
+            <a href="{% url 'vacations:edit' vacation.id %}">{{ vacation.name }}</a>
+            <a href="{% url 'vacations:delete' vacation.id %}">Delete</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no vacations yet. <a href="{% url 'vacations:create' %}">Create one now!</a></p>
+{% endif %}

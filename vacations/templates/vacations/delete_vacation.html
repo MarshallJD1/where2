@@ -1,0 +1,6 @@
+<h1>Are you sure you want to delete the vacation "{{ vacation.name }}"?</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>

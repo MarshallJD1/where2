@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Vacation, VacationEvent
 from .forms import VacationForm, AddEventToVacationForm
 from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 @login_required
 def dashboard(request):
@@ -60,10 +61,10 @@ def add_event_to_vacation(request):
 @login_required
 def save_event_to_vacation(request):
     if request.method == "POST":
-        vacation_id = request.POST.get("vacation_id")
-        vacation = get_object_or_404(Vacation, id=vacation_id, user=request.user)
-
-        event_id = request.POST.get("event_id")
+        vacation_id = request.POST.get('vacation')
+        event_id = request.POST.get('event_id')
+        vacation = Vacation.objects.get(id=vacation_id)
+        event = Event.objects.get(id=event_id)
 
         # Prevent duplicates
         if VacationEvent.objects.filter(vacation=vacation, event_id=event_id).exists():

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,21 +56,28 @@
             <a href="{{ event.url }}" target="_blank">More Info</a>
 
             {% if user.is_authenticated %}
-            <form class="add-event-form" action="{% url 'vacations:add_event_to_vacation' %}" data-event-id="{{ event.id|default:event.name|slugify }}">
-
+            <form class="add-event-form" action="{% url 'vacations:add_event_to_vacation' %}" method="POST">
                 {% csrf_token %}
-                <!-- Hidden fields carrying event details -->
-                <input type="hidden" name="event_id" value="{{ event.id|default:event.name }}">
+                <input type="hidden" name="event_id" value="{{ event.id }}">
                 <input type="hidden" name="name" value="{{ event.name }}">
                 <input type="hidden" name="date" value="{{ event.date }}">
                 <input type="hidden" name="venue" value="{{ event.venue }}">
                 <input type="hidden" name="description" value="{{ event.description }}">
                 <input type="hidden" name="image_url" value="{{ event.image }}">
                 <input type="hidden" name="event_url" value="{{ event.url }}">
-
-                <!-- Dropdown for user's vacations -->
-                {{ vacation_form.as_p }}
-
+            
+                <!-- Vacation Dropdown -->
+                {% if vacations %}
+                  <label for="vacation">Select a Vacation</label>
+                  <select name="vacation" id='vacation' required>
+                    {% for vacation in vacations %}
+                      <option value="{{ vacation.id }}">{{ vacation.name }}</option>
+                    {% endfor %}
+                  </select>
+                {% else %}
+                  <p>No vacations found. Please create one first.</p>
+                {% endif %}
+            
                 <button type="submit">Save to Vacation</button>
             </form>
             <div class="ajax-message" id="message-{{ event.id|default:event.name|slugify }}"></div>
@@ -80,55 +89,74 @@
     </div>
     {% endif %}
 
-
     <script>
-       document.addEventListener("DOMContentLoaded", function () {
-    const forms = document.querySelectorAll(".add-event-form"); // Get all event save forms
+        document.addEventListener("DOMContentLoaded", function () {
+            const forms = document.querySelectorAll(".add-event-form"); // Get all event save forms
 
-    forms.forEach((form) => { // Add event listener to each form
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();  // Prevent form submission
+            forms.forEach((form) => { // Add event listener to each form
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();  // Prevent form submission
 
-            const formData = new FormData(form); // Get form data
-            const actionUrl = form.getAttribute("action") || "{% url 'vacations:add_event_to_vacation' %}"; // Get form action URL
+                    const formData = new FormData(form); // Get form data
+                    const actionUrl = form.getAttribute("action"); // Now no fallback is needed
 
-            fetch(actionUrl, { // Send form data via AJAX
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                },
-            })
-                .then((response) => response.json()) // Parse response as JSON
-                .then((data) => {
-                    const eventId = form.getAttribute("data-event-id"); // Get event ID
-                    const messageDiv = document.getElementById("message-" + eventId); // Get message div
+                    // Get CSRF token from the DOM
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    console.log("CSRF Token:", csrfToken);  // Debug log for CSRF token
 
-                    if (data.success) { // Show success or error message
-                        messageDiv.innerHTML = `<p style="color:green;">${data.message}</p>`;
-                        form.querySelector("button[type=submit]").disabled = true; // Prevent multiple saves
-                    } else { // Show error message
-                        let errorText = data.errors
-                            ? Object.values(data.errors).join("<br>")
-                            : "An error occurred";
-                        messageDiv.innerHTML = `<p style="color:red;">${errorText}</p>`;
+                    // Debugging form data
+                    console.log("Form Data:", formData); // Log the form data to ensure it includes vacation field
+
+                    // Check if vacation field is present in FormData
+                    if (!formData.has('vacation')) {
+                        console.error("Vacation field is missing in the form data");
+                        return; // Stop submission if the vacation field is missing
                     }
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    const eventId = form.getAttribute("data-event-id");
-                    const messageDiv = document.getElementById("message-" + eventId);
-                    messageDiv.innerHTML = `<p style="color:red;">Server error. Please try again later.</p>`;
+
+                    fetch(actionUrl, { // Send form data via AJAX
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRFToken": csrfToken,  // Add CSRF token here
+                        },
+                    })
+                        .then((response) => response.json()) // Parse response as JSON
+                        .then((data) => {
+                            const eventId = form.getAttribute("data-event-id"); // Get event ID
+                            const messageDiv = document.getElementById("message-" + eventId); // Get message div
+
+                            console.log("Response Data:", data); // Debug log for response
+
+                            if (data.success) { // Show success or error message
+                                if (messageDiv) {
+                                    messageDiv.innerHTML = `<p style="color:green;">${data.message}</p>`;
+                                    form.querySelector("button[type=submit]").disabled = true; // Prevent multiple saves
+                                } else {
+                                    console.error("Message div not found for event ID " + eventId);  // Error if message div is missing
+                                }
+                            } else { // Show error message
+                                let errorText = data.errors
+                                    ? Object.values(data.errors).join("<br>")
+                                    : "An error occurred";
+                                if (messageDiv) {
+                                    messageDiv.innerHTML = `<p style="color:red;">${errorText}</p>`;
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                            const eventId = form.getAttribute("data-event-id");
+                            const messageDiv = document.getElementById("message-" + eventId);
+                            if (messageDiv) {
+                                messageDiv.innerHTML = `<p style="color:red;">Server error. Please try again later.</p>`;
+                            }
+                        });
                 });
+            });
         });
-    });
-});
 
     </script>
-
-
-
-
 </body>
 
 </html>
