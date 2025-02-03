@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <h1>Edit Event: {{ event.name }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'dashboard' %}">Cancel</a>
+  </form>
+{% endblock %}
