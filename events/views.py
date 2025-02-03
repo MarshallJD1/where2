@@ -3,6 +3,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EventSearchForm, SavedEventForm
 from django.contrib.auth.decorators import login_required
+from .models import SavedEvent
 
 
 def get_uniform_image(images):
