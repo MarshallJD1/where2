@@ -6,10 +6,14 @@
   {% if saved_events %}
     <ul>
       {% for event in saved_events %}
-        <li style="margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 0.5rem;">
+        <li class="eventsCard card bg-secondary text-white p-3 mb-3">
           <h3>
             <a href="{{ event.url }}" target="_blank">{{ event.name }}</a>
           </h3>
+          {% if event.image %}
+          <img src="{{ event.image }}" alt="{{ event.name }}">
+          {% endif %}
+          
           <p><strong>Date:</strong> {{ event.date }} | <strong>Venue:</strong> {{ event.venue }}</p>
           {% if event.notes %}
             <p><strong>Notes:</strong> {{ event.notes }}</p>
@@ -25,3 +29,5 @@
     <p>You have no saved events yet. Try saving an event from your search results!</p>
   {% endif %}
 {% endblock %}
+
+
