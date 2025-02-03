@@ -6,15 +6,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django-Setup</title>
-    <link rel="stylesheet" href="{% static 'css/indexstyle.css' %}" >
+    <style>
+      .event-card {
+          border: 1px solid #ddd;
+          padding: 10px;
+          margin-bottom: 15px;
+          border-radius: 5px;
+      }
+      .event-card img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 5px;
+      }
+      .error-message {
+          color: red;
+          font-weight: bold;
+      }
+  </style>
+  <link rel="stylesheet" 
+  href="https://bootswatch.com/5/quartz/bootstrap.min.css">
+
+  <link rel="stylesheet" 
+  href="{% static 'css/indexstyle.css' %}">
+
 </head>
-<body>
-    <h1>Hello Django From Heroku</h1>
+<!-- <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'home' %}"> Where2</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button> -->
+<main>
+      <body class="d-flex flex-column h-100 main-bg">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <img src="{% static 'images/logo.png' %}" alt="A logo of Where2" style="height: 55px;">
+            </a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarText"
+              aria-controls="navbarText"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == search_url %}active{% endif %}"
+                aria-current="page"
+                href="{% url 'search_events' %}"
+                >Search</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == dashboard_url %}active{% endif %}"
+                aria-current="page"
+                href="{% url 'dashboard' %}"
+                >Events</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.path == save_url %}active{% endif %}"
+                aria-current="page"
+                href="{% url 'save_event' %}"
+                >Save</a
+              >
+            </li>
+           
+          </ul>
+        </div>
+      </div>
+    </nav>
+      
 
     {% block content %}
 
     {% endblock %}
+  </main>
+  
+
+  
 
     <div id="intro-overlay">
         <svg id="intro-logo" width="465" height="103" viewBox="0 0 465 103" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,5 +131,11 @@
     }
   });
 </script>
+
+ 
 </body>
 </html>
+
+
+
+ 

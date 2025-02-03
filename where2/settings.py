@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 TICKETMASTER_API_KEY = os.environ.get('TICKETMASTER_API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'where2-37901e30632d.herokuapp.com']
 CSRF_TRUSTED_ORIGINS = ['https://*.codeinstitute-ide.net', 'https://*.herokuapp.com']
