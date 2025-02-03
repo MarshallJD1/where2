@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'users',
     'events',
+    'django_extensions',
     
 ]
 
