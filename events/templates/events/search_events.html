@@ -47,6 +47,15 @@
                     <p><strong>Venue:</strong> {{ event.venue }}</p>
                     <p><strong>Description:</strong> {{ event.description }}</p>
                     <a href="{{ event.url }}" target="_blank">More Info</a>
+                    <form action="{% url 'save_event' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="event_id" value="{{ event.id }}">
+                        <input type="hidden" name="name" value="{{ event.name }}">
+                        <input type="hidden" name="date" value="{{ event.date }}">
+                        <input type="hidden" name="venue" value="{{ event.venue }}">
+                        <input type="hidden" name="url" value="{{ event.url }}">
+                        <button type="submit">Save Event</button>
+                    </form>
                 </div>
             {% endfor %}
         </div>
