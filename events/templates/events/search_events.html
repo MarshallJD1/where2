@@ -33,7 +33,6 @@
         }
     </style>
     <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
-    <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
 </head>
 
 
@@ -62,7 +61,7 @@
                 <h2>Events Found:</h2>
                 <div>
                     {% for event in events %}
-                        <div class="event-card">
+                        <div class="event-card card bg-secondary text-white p-3">
                             {% if event.image %}
                                 <img src="{{ event.image }}" alt="{{ event.name }}">
                             {% endif %}
