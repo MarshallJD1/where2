@@ -1,46 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Events</title>
     <style>
-        .event-card {
+        .eventsCard {
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 15px;
             border-radius: 5px;
         }
-        .event-card img {
-            max-width: 100%;
-            height: auto;
+
+        .eventsCard img {
             border-radius: 5px;
+            max-width: 100%;
+            /* Ensures the image does not exceed the container */
+            height: auto;
+            /* Maintains aspect ratio */
+            object-fit: contain;
+            /* Prevents stretching */
+            display: block;
+            margin: auto;
+            /* Centers the image */
         }
+
         .error-message {
             color: red;
             font-weight: bold;
         }
     </style>
+    <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
 </head>
+
 <body>
-    <h1>Search for Events</h1>
 
-    <form method="GET">
-        {{ form.as_p }}
-        <button type="submit">Search</button>
-    </form>
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <h1>Search for Events</h1>
 
-    {% if error_message %}
-        <p class="error-message">{{ error_message }}</p>
-    {% endif %}
+            <div class="event-card card bg-secondary text-white p-3">
+                <form method="GET">
+                    {% load crispy_forms_tags %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
 
-    {% if events %}
-        <h2>Events Found:</h2>
-        <div>
-            {% for event in events %}
-                <div class="event-card">
+            {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+            {% endif %}
+
+            {% if events %}
+            <h2>Events Found:</h2>
+            <div>
+                {% for event in events %}
+                <div class="eventsCard">
                     {% if event.image %}
-                        <img src="{{ event.image }}" alt="{{ event.name }}">
+                    <img src="{{ event.image }}" alt="{{ event.name }}">
                     {% endif %}
                     <h3>{{ event.name }}</h3>
                     <p><strong>Date:</strong> {{ event.date }}</p>
@@ -57,8 +75,12 @@
                         <button type="submit">Save Event</button>
                     </form>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
+
 </body>
+
 </html>
