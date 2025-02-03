@@ -25,7 +25,7 @@ The objective of this hackathon project was to:
 
 * Develop a user-friendly interface using an intuitive and responsive web application that allows users to easily search for and view events based on criteria such as location, date, category, or keywords.
 
-*Implement robust backend functionality using Python web framework (e.g., Django) to design a secure and scalable backend that handles user authentication, event data storage, and efficient querying.
+* Implement robust backend functionality using Python web framework (e.g., Django) to design a secure and scalable backend that handles user authentication, event data storage, and efficient querying.
 
 * Integrate external APIs to fetch real-time event information and display it dynamically on the platform.
 
