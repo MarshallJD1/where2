@@ -56,7 +56,7 @@
             <h2>Events Found:</h2>
             <div>
                 {% for event in events %}
-                <div class="eventsCard">
+                <div class="eventsCard card bg-secondary text-white p-3">
                     {% if event.image %}
                     <img src="{{ event.image }}" alt="{{ event.name }}">
                     {% endif %}
