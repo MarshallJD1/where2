@@ -1,10 +1,15 @@
 {% extends "index.html" %}
 {% block content %}
     <h2>Login</h2>
+    <div class="card bg-secondary text-white">
     <form method="post">
-        {{ form.as_p }}
+        {% load crispy_forms_tags %}
+        {{ form|crispy }}
         {% csrf_token %}
-        <button type="submit">Login</button>
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
-    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    </div>
+    <div>
+    <p>Don't have an account? <a href="{% url 'register' %}"class="btn btn-secondary">Register</a></p>
+    <div>
 {% endblock %}
